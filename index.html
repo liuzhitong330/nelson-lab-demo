@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>dMSN Heterogeneity and Levodopa-Induced Dyskinesia — Cathy Liu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: Georgia, serif; max-width: 720px; margin: 0 auto;
+         padding: 2.5rem 1.5rem 4rem; line-height: 1.65; color: #222; background: #fff; }
+  h1, h2 { font-family: -apple-system, system-ui, sans-serif; }
+  h1 { font-size: 1.45rem; margin-bottom: .2rem; }
+  .byline { font-family: system-ui, sans-serif; font-size: .85rem; color: #777; margin-bottom: 2rem; }
+  h2 { font-size: 1.1rem; margin-top: 2.5rem; border-bottom: 1px solid #eee; padding-bottom: .3rem; }
+  .note { background: #f6f6f4; border-left: 3px solid #999; padding: .8rem 1rem;
+          font-family: system-ui, sans-serif; font-size: .85rem; color: #444; margin: 1.2rem 0; }
+  figure { margin: 1.2rem 0; }
+  figure img { max-width: 100%; display: block; }
+  figcaption { font-family: system-ui, sans-serif; font-size: .78rem; color: #777; margin-top: .4rem; }
+  a { color: #2255aa; }
+  .meta { font-family: system-ui, sans-serif; font-size: .8rem; color: #888;
+          margin-top: 3rem; border-top: 1px solid #eee; padding-top: 1rem; }
+  .tag { display: inline-block; font-family: system-ui, sans-serif; font-size: .75rem;
+         background: #eef2f8; color: #2255aa; padding: .15rem .5rem;
+         border-radius: 3px; margin-right: .3rem; }
+  .highlight  { background: #fff5f5; border-left: 3px solid #c0392b; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+  .highlight2 { background: #fdf2f8; border-left: 3px solid #8e44ad; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+  .highlight3 { background: #f0f4ff; border-left: 3px solid #1a5c8a; padding: .6rem 1rem;
+                font-family: system-ui, sans-serif; font-size: .88rem; margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<h1>Why the Motor Striatum Hyperactivates: dMSN Subpopulation Heterogeneity in Levodopa-Induced Dyskinesia</h1>
+<div class="byline">Cathy Liu · cathyliu014@gmail.com · personal exploratory project, July 2026</div>
+
+<span class="tag">Parkinson's disease</span>
+<span class="tag">levodopa-induced dyskinesia</span>
+<span class="tag">basal ganglia</span>
+<span class="tag">medium spiny neurons</span>
+<span class="tag">FosTRAP</span>
+<span class="tag">dopamine receptors</span>
+<span class="tag">Allen Brain Atlas</span>
+<span class="tag">Python</span>
+
+<p style="margin-top:1.2rem">
+The
+<a href="https://nelsonlab.ucsf.edu/" target="_blank">Nelson lab</a>
+studies how striatal circuits generate normal and abnormal movement, with a focus
+on Parkinson's disease, levodopa-induced dyskinesia (LID), and the cellular logic
+of action selection in the basal ganglia. Their approach — combining activity-dependent
+cell labeling (FosTRAP), chemogenetics, optogenetics, and ex vivo electrophysiology —
+allows them to ask questions about specific, functionally defined cell populations
+rather than brain regions as a whole.
+</p>
+<p>
+I was struck by the 2024 <em>Cell Reports</em> paper (Ryan et al.) showing that LID
+is driven not by all direct pathway MSNs (dMSNs), but by a specific subpopulation —
+TRAPed dMSNs — that have higher D1 receptor expression, greater dopamine-dependent
+excitability, and more excitatory input from motor cortex and thalamus. That raises a
+question the Allen Brain Atlas can partially address: what does the receptor expression
+landscape look like across the full motor circuit? Where does the combination of D1
+sensitivity + glutamatergic drive actually peak?
+</p>
+
+<div class="note">
+<strong>What this is.</strong> Personal exploratory analysis, not novel research.
+Gene expression data from the
+<a href="https://mouse.brain-map.org/" target="_blank">Allen Mouse Brain Atlas</a>
+ISH experiments, July 2026. Genes: Drd1 (exp. 80266582), Drd2 (exp. 77674878),
+Pdyn (exp. 75929626), Grin2b (exp. 69257725). Regions: CP=247, ACB=56, OT=131,
+MOp=985, Thal=549, SNr=381, Cereb=512, Hipp=382. Figure 2 is a schematic based
+on Ryan et al. (2024) <em>Cell Reports</em> — not a re-analysis of their data.
+</div>
+
+<h2>Dorsal striatum: peak GluN2B expression, substantial D1/D2 co-presence</h2>
+
+<figure>
+  <img src="striatum_scatter.svg?v=1"
+       alt="Scatter plot of Drd1 vs Grin2b expression across motor circuit regions">
+  <figcaption>Drd1 (x-axis) vs. Grin2b (y-axis) expression density across 8 motor-circuit
+  brain regions. Dot size = Drd2 expression. Striatal regions (CP, ACB, OT) are outlined.
+  Allen Mouse Brain Atlas ISH, July 2026.
+  </figcaption>
+</figure>
+
+<div class="highlight">
+<strong>CP (dorsal striatum) has the highest Grin2b expression (0.144) of any region
+examined — including motor cortex (0.139) and nucleus accumbens (0.114).</strong>
+GluN2B-containing NMDA receptors mediate the glutamatergic drive from motor cortex
+and thalamus onto striatal MSNs. In the context of the Ryan 2024 paper, this matters
+because TRAPed dMSNs specifically receive more excitatory synaptic input from MOp and
+thalamus. The high Grin2b density in CP means those synapses are operating on a background
+of strong NMDA-receptor expression — the substrate for the dopamine-glutamate interaction
+that tips TRAPed dMSNs into LID-associated hyperactivation.
+</div>
+
+<div class="highlight3">
+<strong>ACB has 7.6× more Drd1 than CP (0.105 vs. 0.014), but LID is a
+dorsal-striatum-specific phenomenon.</strong>
+The higher absolute receptor density in nucleus accumbens reflects its role in
+reward and motivation circuits, where phasic dopamine signals are more prominent.
+By contrast, dorsal striatum (CP) operates in a regime where D1 and D2 receptor populations
+are both present and balanced (D1/D2 ratio ≈ 0.57 in CP vs. 1.10 in ACB), so the
+dopamine-induced shift in direct vs. indirect pathway balance is largest and most
+sensitive to perturbation by levodopa. The Ryan et al. finding — that a subset of CP dMSNs
+with slightly higher Drd1 drives all of LID — makes sense in this context: in a region
+where D1 expression is lower and more heterogeneous, small differences in receptor density
+produce large functional differences.
+</div>
+
+<h2>The TRAPed dMSN: how a subpopulation drives dyskinesia</h2>
+
+<figure>
+  <img src="dmSN_mechanism.svg?v=1"
+       alt="Schematic of TRAPed dMSN mechanism in levodopa-induced dyskinesia">
+  <figcaption>Conceptual schematic of the dMSN subpopulation model from Ryan et al. (2024)
+  <em>Cell Reports</em>. Within the dorsal striatum, FosTRAP-labeled dMSNs (activated during
+  LID episodes) have higher Drd1 expression, higher dopamine-dependent intrinsic excitability,
+  and more excitatory synaptic input from primary motor cortex and thalamus. These properties
+  cause them to fire excessively when dopamine spikes with levodopa, producing SNr disinhibition
+  and the involuntary movements characteristic of LID.
+  </figcaption>
+</figure>
+
+<div class="highlight2">
+<strong>The key question the TRAPed dMSN model opens: are these cells constitutively
+different, or are they shaped by prior dopamine depletion?</strong>
+If TRAPed dMSNs have pre-existing higher Drd1 expression (intrinsic heterogeneity),
+then LID risk might be predictable from baseline striatal composition before dopamine
+depletion. If instead the upregulation of Drd1 and excitatory synaptic strength is
+driven by chronic dopamine loss (the 6-OHDA state), then LID is a learned circuit
+state — and its prevention might be possible by intervening earlier in the disease.
+The Twedell et al. 2024 (bioRxiv) paper from the same lab, showing that lateral
+inhibition from D2-MSNs gates the threshold for involuntary movements, adds another
+layer: whether lateral inhibition itself changes in the dopamine-depleted and levodopa-treated
+striatum could determine why some patients develop LID and others don't.
+</div>
+
+<h2>Connection to the lab's work</h2>
+<ul>
+<li>
+<strong>TRAPed dMSN identity and plasticity:</strong>
+The expression data suggests CP has higher Grin2b than any other region — a
+substrate for Hebbian strengthening of cortical inputs onto TRAPed dMSNs. I'd be
+excited to contribute to experiments asking whether synaptic potentiation at
+MOp → TRAPed dMSN synapses is necessary for LID expression, or whether blocking
+GluN2B-containing NMDARs specifically in TRAPed cells alters dyskinesia.
+</li>
+<li>
+<strong>Lateral inhibition and action selection:</strong>
+The Twedell 2024 work on striatal D2-MSN lateral inhibition raises the question
+of whether lateral inhibition from D2-MSNs specifically suppresses TRAPed dMSN
+activity, and whether this connection is weakened by chronic dopamine loss. The
+combination of the FosTRAP approach with circuit-specific chemogenetics seems well
+suited to test this.
+</li>
+<li>
+On the experimental side, I have hands-on experience with mammalian cell culture,
+Western blot, ELISA, flow cytometry, and fluorescence microscopy. I'm also comfortable
+with computational analysis of expression and circuit data and would be glad to
+contribute on both sides.
+</li>
+</ul>
+
+<h2>Methods</h2>
+<p>
+Gene expression data from the
+<a href="https://mouse.brain-map.org/" target="_blank">Allen Mouse Brain Atlas</a>
+via the ABA RMA API, July 2026. ISH experiments: Drd1 (80266582), Drd2 (77674878),
+Pdyn (75929626), Grin2b (69257725). Eight brain structure IDs queried via
+StructureUnionize model: CP=247, ACB=56, OT=131, MOp=985, Thal=549, SNr=381,
+Cereb=512, Hipp=382. Expression density = fraction of pixels above ISH threshold.
+Figure 2 is a schematic based on Ryan MB et al. (2024) <em>Cell Rep</em> 43:114483
+and Twedell EL et al. (2024) <em>bioRxiv</em> 2024.10.11.617939 (Nelson lab).
+Figures: pure Python SVG. Code:
+<a href="fetch_data.py">fetch_data.py</a>, <a href="make_figures.py">make_figures.py</a>.
+Raw data: <a href="striatum_genes.tsv">striatum_genes.tsv</a>.
+</p>
+
+<div class="meta">
+Cathy Liu — cathyliu014@gmail.com | 415-216-3799<br>
+<a href="https://liuzhitong330.github.io/tvb-llm-robust-neurostim/" target="_blank">Epilepsy neurostimulation project</a> ·
+<a href="https://arxiv.org/abs/2606.04339" target="_blank">arXiv:2606.04339</a>
+</div>
+
+</body>
+</html>
